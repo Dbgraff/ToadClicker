@@ -17,11 +17,11 @@ public class ToadGameManager : MonoBehaviour
 
     [Header("🐸 Toad State")]
     [SerializeField] private int energy = 0;
-    [SerializeField] private int toadLevel = 0;
+    [SerializeField] private int toadLevel = 1;
     [SerializeField] private ToadState currentState = ToadState.Hungry;
 
     [Header("👁️ UI References")]
-    [SerializeField] private TextMeshProUGUI enegryText;
+    [SerializeField] private TextMeshProUGUI energyText;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private Button feedButton;
@@ -132,28 +132,28 @@ public class ToadGameManager : MonoBehaviour
         {
             case ToadState.Hungry:
                 //toadRenderer.material = hungryMaterial;
-                //statusText.text = "Голодная 🐸";
+                statusText.text = "Голодная";
                 break;
             case ToadState.Happy:
                 //toadRenderer.material = happyMaterial;
-                //statusText.text = "Счастливая 💫";
-                //stateCoroutine = StartCoroutine(ReturnToHungry());
+                statusText.text = "Счастливая";
+                stateCoroutine = StartCoroutine(ReturnToHungry());
                 break;
             case ToadState.Evolving:
                 //toadRenderer.material = evolvingMaterial;
-                //statusText.text = "Эволюционирует... 🌟";
-                //stateCoroutine = StartCoroutine(EvolutionProcess());
+                statusText.text = "Эволюционирует...";
+                stateCoroutine = StartCoroutine(EvolutionProcess());
                 break;
         }
     }
 
     private void UpdateUI()
     {
-        //energyText.text = $"Энергия: {energy}";
-        //levelText.text = $"Уровень: {toadLevel}";
+        energyText.text = $"Энергия: {energy}";
+        levelText.text = $"Уровень: {toadLevel}";
 
-        //feedButton.interactable = energy >= feedCost && currentState != ToadState.Evolving;
-        //evolveButton.interactable = energy >= evolveCost && currentState != ToadState.Evolving;
+        feedButton.interactable = energy >= feedCost && currentState != ToadState.Evolving;
+        evolveButton.interactable = energy >= evolveCost && currentState != ToadState.Evolving;
     }
 
 
