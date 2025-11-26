@@ -875,7 +875,7 @@ MonoBehaviour:
   energy: 0
   toadLevel: 0
   currentState: 0
-  enegryText: {fileID: 1185134095}
+  energyText: {fileID: 1185134095}
   levelText: {fileID: 1432883809}
   statusText: {fileID: 1820954431}
   feedButton: {fileID: 1953616159}
@@ -1704,7 +1704,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1953616160}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 695020812}
+        m_TargetAssemblyTypeName: ToadGameManager, Assembly-CSharp
+        m_MethodName: FeedToad
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1953616160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1861,7 +1873,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2111363668}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 695020812}
+        m_TargetAssemblyTypeName: ToadGameManager, Assembly-CSharp
+        m_MethodName: EvolveToad
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2111363668
 MonoBehaviour:
   m_ObjectHideFlags: 0
