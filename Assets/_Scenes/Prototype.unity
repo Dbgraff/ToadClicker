@@ -176,10 +176,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041F\u043E\u043A\u043E\u0440\u043C\u0438\u0442\u044C (10)"
+  m_text: "\u041F\u043E\u043A\u043E\u0440\u043C\u0438\u0442\u044C ()"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1b63aa2120640824aacc173d8c3d818c, type: 2}
+  m_sharedMaterial: {fileID: -806728707463936425, guid: 1b63aa2120640824aacc173d8c3d818c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -875,19 +875,28 @@ MonoBehaviour:
   energy: 0
   toadLevel: 0
   currentState: 0
+  baseClickEnergy: 1
+  happyClickBonus: 2
+  autoEnergyInterval: 5
+  baseAutoEnergy: 1
+  happyAutoEnergyBonus: 2
   energyText: {fileID: 1185134095}
   levelText: {fileID: 1432883809}
   statusText: {fileID: 1820954431}
   feedButton: {fileID: 1953616159}
+  feedButtonText: {fileID: 113234994}
   evolveButton: {fileID: 2111363667}
   toadObject: {fileID: 405813470}
-  hungryMaterial: {fileID: 0}
-  happyMaterial: {fileID: 0}
-  evolvingMaterial: {fileID: 0}
+  hungryMaterial: {fileID: 2100000, guid: b640fca14ed7f8947bdd6a6e485d680d, type: 2}
+  happyMaterial: {fileID: 2100000, guid: 0bd7fc4f87587714f8ec4b3d82e9c915, type: 2}
+  evolvingMaterial: {fileID: 2100000, guid: aafeeaab2ec23964ca13ef3fdeedd317, type: 2}
   feedCost: 10
   evolveCost: 100
   happyDuration: 5
-  evolveDuration: 3
+  baseEvolveDuration: 3
+  happyEvolveSpeedBonus: 0.5
+  hungryFeedCostMultiplier: 1
+  happyFeedCostMultiplier: 0.8
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

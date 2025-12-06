@@ -19,12 +19,21 @@ public class ToadGameManager : MonoBehaviour
     [SerializeField] private int energy = 0;
     [SerializeField] private int toadLevel = 1;
     [SerializeField] private ToadState currentState = ToadState.Hungry;
+    [SerializeField] private int baseClickEnergy = 1;
+    [SerializeField] private int happyClickBonus = 2;
+
+
+    [Header("🔄 Auto Income")]
+    [SerializeField] private float autoEnergyInterval = 5f;
+    [SerializeField] private int baseAutoEnergy = 1;
+    [SerializeField] private int happyAutoEnergyBonus = 2;
 
     [Header("👁️ UI References")]
     [SerializeField] private TextMeshProUGUI energyText;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private Button feedButton;
+    [SerializeField] private TextMeshProUGUI feedButtonText;
     [SerializeField] private Button evolveButton;
 
     [Header("🎨 Toad Visuals")]
@@ -37,7 +46,9 @@ public class ToadGameManager : MonoBehaviour
     [SerializeField] private int feedCost = 10;
     [SerializeField] private int evolveCost = 100;
     [SerializeField] private float happyDuration = 5f;
-    [SerializeField] private float evolveDuration = 3f;
+    [SerializeField] private float baseEvolveDuration = 3f;
+    [SerializeField] private float happyEvolveSpeedBonus = 0.5f;
+    [SerializeField] private float happyFeedCostMultiplier = 0.8f;
 
     public enum ToadState {Hungry, Happy, Evolving}
 
@@ -48,6 +59,7 @@ public class ToadGameManager : MonoBehaviour
     private Renderer toadRenderer;
     private Vector3 originalScale;
     private Coroutine stateCoroutine;
+    private Coroutine autoIncrementCoroutine;
 
     void Awake()
     {
@@ -68,14 +80,19 @@ public class ToadGameManager : MonoBehaviour
         originalScale = toadObject.transform.localScale;
         SetToadState(ToadState.Hungry);
         UpdateUI();
-        
+        autoIncrementCoroutine = StartCoroutine(AutoEnergyGeneration());       
     }
 
     public void OnToadClick()
     {
         if(currentState != ToadState.Evolving)
         {
-            AddEnergy(1);
+            int energyGained = baseClickEnergy;
+
+            if (currentState == ToadState.Happy)
+                energyGained += happyClickBonus;
+
+            AddEnergy(energyGained);
             StartCoroutine(ClickAnimation());
         }
     }
@@ -92,12 +109,26 @@ public class ToadGameManager : MonoBehaviour
 
     public void FeedToad()
     {
-        if (energy >= feedCost && currentState != ToadState.Evolving)
+        int actualFeedCost = currentState == ToadState.Happy
+            ? Mathf.RoundToInt(feedCost * happyFeedCostMultiplier) : feedCost;
+
+        if (energy >= actualFeedCost && currentState != ToadState.Evolving)
         {
-            energy -= feedCost;
+            energy -= actualFeedCost;
             SetToadState(ToadState.Happy);
             UpdateUI();
+
+            Debug.Log($"🍕 Накормлено за {actualFeedCost} энергии");
         }
+    }
+
+    private int GetCurrentFeedCost()
+    {
+        if (currentState == ToadState.Happy)
+        {
+            return Mathf.RoundToInt(feedCost * happyFeedCostMultiplier);
+        }
+        return feedCost;
     }
 
     public void EvolveToad()
@@ -147,10 +178,20 @@ public class ToadGameManager : MonoBehaviour
         }
     }
 
+    private void UpdateFeedButtonText(int currentFeedCost)
+    {
+        string discountText = currentState == ToadState.Happy ? " (скидка!)" : "";
+
+        feedButtonText.text = $"Покормить{discountText}\n<size=34>{currentFeedCost} энергии</size=34>";
+    }
+
     private void UpdateUI()
     {
         energyText.text = $"Энергия: {energy}";
         levelText.text = $"Уровень: {toadLevel}";
+
+        int currentFeedCost = GetCurrentFeedCost();
+        UpdateFeedButtonText(currentFeedCost);
 
         feedButton.interactable = energy >= feedCost && currentState != ToadState.Evolving;
         evolveButton.interactable = energy >= evolveCost && currentState != ToadState.Evolving;
@@ -165,18 +206,25 @@ public class ToadGameManager : MonoBehaviour
 
     private IEnumerator EvolutionProcess()
     {
+        float actualEvolveDuration = baseEvolveDuration;
+
+        if (currentState == ToadState.Happy)
+            actualEvolveDuration -= happyEvolveSpeedBonus;
+
+        Debug.Log($"🌟 Эволюция займёт {actualEvolveDuration} сек");
+
         float timer = 0f;
         Vector3 startScale = toadObject.transform.localScale;
         Vector3 targetScale = originalScale * 1.3f;
 
-        while (timer < evolveDuration)
+        while(timer < actualEvolveDuration)
         {
             timer += Time.deltaTime;
-            float progress = timer / evolveDuration;
+            float progress = timer / actualEvolveDuration;
 
             float pulse = Mathf.Sin(progress * Mathf.PI * 8f) * 0.1f + 1f;
             toadObject.transform.localScale = Vector3.Lerp(startScale, targetScale, progress) * pulse;
-
+            
             yield return null;
         }
 
@@ -184,6 +232,7 @@ public class ToadGameManager : MonoBehaviour
         UpdateUI();
         toadObject.transform.localScale = originalScale * (1f + toadLevel * 0.1f);
         SetToadState(ToadState.Happy);
+
     }
 
     private IEnumerator ClickAnimation()
@@ -191,5 +240,27 @@ public class ToadGameManager : MonoBehaviour
         toadObject.transform.localScale = originalScale * (1f + toadLevel * 0.1f) * 1.2f;
         yield return new WaitForSeconds(0.1f);
         toadObject.transform.localScale = originalScale * (1f + toadLevel * 0.1f);
+    }
+
+    private IEnumerator AutoEnergyGeneration()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(autoEnergyInterval);
+
+            switch (currentState)
+            {
+                case ToadState.Hungry:
+                    break;
+
+                case ToadState.Happy:
+                    AddEnergy(baseAutoEnergy + happyAutoEnergyBonus);
+                    break;
+
+                case ToadState.Evolving:
+                    break;
+            }
+        }
+            
     }
 }
