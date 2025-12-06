@@ -131,16 +131,16 @@ public class ToadGameManager : MonoBehaviour
         switch (currentState)
         {
             case ToadState.Hungry:
-                //toadRenderer.material = hungryMaterial;
+                toadRenderer.material = hungryMaterial;
                 statusText.text = "Голодная";
                 break;
             case ToadState.Happy:
-                //toadRenderer.material = happyMaterial;
+                toadRenderer.material = happyMaterial;
                 statusText.text = "Счастливая";
                 stateCoroutine = StartCoroutine(ReturnToHungry());
                 break;
             case ToadState.Evolving:
-                //toadRenderer.material = evolvingMaterial;
+                toadRenderer.material = evolvingMaterial;
                 statusText.text = "Эволюционирует...";
                 stateCoroutine = StartCoroutine(EvolutionProcess());
                 break;
