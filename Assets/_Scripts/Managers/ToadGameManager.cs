@@ -229,10 +229,9 @@ public class ToadGameManager : MonoBehaviour
         }
 
         toadLevel++;
-        UpdateUI();
         toadObject.transform.localScale = originalScale * (1f + toadLevel * 0.1f);
         SetToadState(ToadState.Happy);
-
+        UpdateUI();
     }
 
     private IEnumerator ClickAnimation()
